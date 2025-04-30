@@ -47,5 +47,7 @@ networks:
 
 volumes:
   api_files:
+    name: "pd311_api"
   db_pd311:
     driver: local
+    name: "pd311_db"
