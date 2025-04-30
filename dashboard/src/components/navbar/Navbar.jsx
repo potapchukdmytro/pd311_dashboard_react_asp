@@ -15,6 +15,7 @@ const pages = [
     {name: "adminPanel", url: "/admin", role: "admin"},
     {name: "Manufactures", url: "/manufactures"},
     {name: "Cars", url: "/cars"},
+    {name: "Engines", url: "/cars"},
 ];
 
 const Navbar = () => {
