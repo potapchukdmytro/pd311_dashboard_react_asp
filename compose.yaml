@@ -18,7 +18,7 @@ services:
       - api_nt
 
   api:
-    build: .
+    build: pd311_web_api/
     image: potapchuk22/pd311_api
     container_name: "api"
     ports:
@@ -34,7 +34,7 @@ services:
       - api_nt
 
   front:
-    build: ../../pd311_react/dashboard_pd311
+    build: dashboard/
     image: potapchuk22/pd311_react
     container_name: "front"
     ports:
