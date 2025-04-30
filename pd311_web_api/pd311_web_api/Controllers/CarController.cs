@@ -40,5 +40,11 @@ namespace pd311_web_api.Controllers
         {
             return Ok();
         }
+
+        [HttpGet]
+        public IActionResult GetAsync()
+        {
+            return Ok();
+        }
     }
 }
