@@ -16,6 +16,7 @@ using pd311_web_api.Jobs;
 using pd311_web_api.Middlewares;
 using Quartz;
 using Serilog;
+using StackExchange.Redis;
 using static pd311_web_api.DAL.Entities.IdentityEntities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +46,13 @@ var jobs = new (Type type, string schedule)[]
 
 builder.Services.AddJobs(jobs);
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
+// redis
+builder.Services.AddScoped(cfg =>
+{
+    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect($"localhost");
+    return multiplexer.GetDatabase();
+});
 
 // Add repositories
 builder.Services.AddScoped<IManufactureRepository, ManufactureRepository>();

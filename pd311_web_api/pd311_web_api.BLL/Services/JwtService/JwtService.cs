@@ -74,7 +74,8 @@ namespace pd311_web_api.BLL.Services.JwtService
             using var rnd = RandomNumberGenerator.Create();
             rnd.GetBytes(bytes);
             bytes = bytes.Select(b => b == 0 ? (byte)1 : b).ToArray();
-            return Encoding.UTF8.GetString(bytes);
+            string token = Convert.ToBase64String(bytes);
+            return token;
         }
 
         public async Task<ServiceResponse> GenerateTokensAsync(AppUser user)

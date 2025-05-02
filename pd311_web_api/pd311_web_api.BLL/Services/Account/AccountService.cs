@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using pd311_web_api.BLL.DTOs;
 using pd311_web_api.BLL.DTOs.Account;
 using pd311_web_api.BLL.Services.Email;
 using pd311_web_api.BLL.Services.JwtService;
+using StackExchange.Redis;
 using System.Text;
 using static pd311_web_api.DAL.Entities.IdentityEntities;
 
@@ -15,18 +17,18 @@ namespace pd311_web_api.BLL.Services.Account
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IJwtService _jwtService;
         private readonly IEmailService _emailService;
-        private readonly IConfiguration _configuration;
+        private readonly IDatabase _redisDb;
 
         private readonly IMapper _mapper;
 
-        public AccountService(UserManager<AppUser> userManager, IEmailService emailService, IMapper mapper, RoleManager<AppRole> roleManager, IConfiguration configuration, IJwtService jwtService)
+        public AccountService(UserManager<AppUser> userManager, IEmailService emailService, IMapper mapper, RoleManager<AppRole> roleManager, IJwtService jwtService, IDatabase redisDb)
         {
             _userManager = userManager;
             _emailService = emailService;
             _mapper = mapper;
             _roleManager = roleManager;
-            _configuration = configuration;
             _jwtService = jwtService;
+            _redisDb = redisDb;
         }
 
         public async Task<bool> ConfirmEmailAsync(string id, string base64)
@@ -59,7 +61,12 @@ namespace pd311_web_api.BLL.Services.Account
             // Generate jwt token
             var response = await _jwtService.GenerateTokensAsync(user);
 
-            return new ServiceResponse("Успішний вхід", true, response.Payload);
+            var tokens = (JwtTokensDto?)response.Payload;
+
+            _redisDb.StringSet($"atoken:{user.Id}", tokens.AccessToken, TimeSpan.FromMinutes(1));
+            _redisDb.StringSet($"rtoken:{user.Id}", tokens.RefreshToken, TimeSpan.FromMinutes(60));
+
+            return new ServiceResponse("Успішний вхід", true, tokens);
         }
 
         public async Task<ServiceResponse> RegisterAsync(RegisterDto dto)
