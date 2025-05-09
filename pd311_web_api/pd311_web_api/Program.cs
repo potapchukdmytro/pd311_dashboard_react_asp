@@ -48,11 +48,11 @@ builder.Services.AddJobs(jobs);
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 // redis
-builder.Services.AddScoped(cfg =>
-{
-    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect($"localhost");
-    return multiplexer.GetDatabase();
-});
+//builder.Services.AddScoped(cfg =>
+//{
+//    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect($"localhost");
+//    return multiplexer.GetDatabase();
+//});
 
 // Add repositories
 builder.Services.AddScoped<IManufactureRepository, ManufactureRepository>();
