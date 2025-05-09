@@ -92,12 +92,10 @@ builder.Services
 
 // CORS
 string? allowedOrigins = builder.Configuration["Cors:AllowedOrigins"];
-Console.WriteLine("\t\t\t\t" + allowedOrigins);
-
-//if (allowedOrigins == null || allowedOrigins.Length == 0)
-//{
-//    allowedOrigins = new string[] { "http://localhost" };
-//}
+if(string.IsNullOrEmpty(allowedOrigins))
+{
+    allowedOrigins = "http://localhost";
+}
 
 builder.Services.AddCors(options =>
 {
