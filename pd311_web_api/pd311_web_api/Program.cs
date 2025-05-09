@@ -91,14 +91,13 @@ builder.Services
     .AddDefaultTokenProviders();
 
 // CORS
-string[]? allowedOrigins = builder.Configuration
-    .GetSection("Cors:AllowedOrigins")
-    .Get<string[]>();
+string? allowedOrigins = builder.Configuration["Cors:AllowedOrigins"];
+Console.WriteLine("\t\t\t\t" + allowedOrigins);
 
-if (allowedOrigins == null || allowedOrigins.Length == 0)
-{
-    allowedOrigins = new string[] { "http://localhost" };
-}
+//if (allowedOrigins == null || allowedOrigins.Length == 0)
+//{
+//    allowedOrigins = new string[] { "http://localhost" };
+//}
 
 builder.Services.AddCors(options =>
 {
