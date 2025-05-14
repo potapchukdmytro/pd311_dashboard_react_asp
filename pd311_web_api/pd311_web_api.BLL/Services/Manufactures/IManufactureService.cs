@@ -8,5 +8,6 @@ namespace pd311_web_api.BLL.Services.Manufactures
         Task<bool> UpdateAsync(UpdateManufactureDto dto);
         Task<bool> DeleteAsync(string id);
         Task<ServiceResponse> GetAllAsync();
+        Task<ServiceResponse> GetByIdAsync(string id);
     }
 }
