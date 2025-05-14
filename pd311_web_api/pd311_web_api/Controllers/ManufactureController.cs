@@ -49,5 +49,11 @@ namespace pd311_web_api.Controllers
             var response = await _manufactureService.GetAllAsync();
             return CreateActionResult(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
+        {
+            return Ok();
+        }
     }
 }
