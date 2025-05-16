@@ -21,7 +21,7 @@ namespace pd311_web_api.BLL.Services.Role
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> CreateAsync(RoleDto dto)
+        public async Task<ServiceResponse> CreateAsync(CreateRoleDto dto)
         {
             var entity = _mapper.Map<AppRole>(dto);
 

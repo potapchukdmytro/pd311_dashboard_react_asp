@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using pd311_web_api.BLL.DTOs.Role;
 using pd311_web_api.BLL.Services.Role;
@@ -13,11 +11,13 @@ namespace pd311_web_api.Controllers
     public class RoleController : BaseController
     {
         private readonly IRoleService _roleService;
+        private readonly IValidator<CreateRoleDto> _createRoleValidator;
         private readonly IValidator<RoleDto> _roleValidator;
 
-        public RoleController(IRoleService roleService, IValidator<RoleDto> roleValidator)
+        public RoleController(IRoleService roleService, IValidator<CreateRoleDto> createRoleValidator, IValidator<RoleDto> roleValidator)
         {
             _roleService = roleService;
+            _createRoleValidator = createRoleValidator;
             _roleValidator = roleValidator;
         }
 
@@ -40,9 +40,9 @@ namespace pd311_web_api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] RoleDto dto)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateRoleDto dto)
         {
-            var validationResult = await _roleValidator.ValidateAsync(dto);
+            var validationResult = await _createRoleValidator.ValidateAsync(dto);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult);
