@@ -9,7 +9,7 @@ namespace pd311_web_api.Controllers
 {
     [ApiController]
     [Route("api/role")]
-    [Authorize(Roles = "admin,manager", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(Roles = "admin,manager", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RoleController : BaseController
     {
         private readonly IRoleService _roleService;
@@ -22,7 +22,6 @@ namespace pd311_web_api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAsync(string? id)
         {
             if (string.IsNullOrEmpty(id))
