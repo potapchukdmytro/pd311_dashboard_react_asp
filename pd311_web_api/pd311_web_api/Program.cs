@@ -91,18 +91,20 @@ builder.Services
     .AddDefaultTokenProviders();
 
 // CORS
-string? allowedOrigins = builder.Configuration["Cors:AllowedOrigins"];
-if(string.IsNullOrEmpty(allowedOrigins))
+const string corsPolicyName = "CorsPolicy";
+var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+if(origins == null || origins.Length == 0)
 {
-    allowedOrigins = "*";
+    origins = ["http://localhost"]; 
 }
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("DefaultCors", builder =>
+    options.AddPolicy(corsPolicyName, builder =>
     {
         builder
-        .AllowAnyOrigin()
+        .WithOrigins(origins)
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
@@ -152,7 +154,7 @@ app.UseMiddleware<MiddlewareLogger>();
 
 app.UseHttpsRedirection();
 
-app.UseCors("DefaultCors");
+app.UseCors(corsPolicyName);
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
