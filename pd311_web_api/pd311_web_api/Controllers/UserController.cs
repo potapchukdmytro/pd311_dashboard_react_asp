@@ -8,7 +8,6 @@ namespace pd311_web_api.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    [Authorize(Roles = "admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
