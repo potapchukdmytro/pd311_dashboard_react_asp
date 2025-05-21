@@ -39,9 +39,9 @@ builder.Services.AddServices(AppDomain.CurrentDomain.GetAssemblies());
 // Add jobs
 var jobs = new (Type type, string schedule)[]
 {
-    (typeof(HelloJob), "0 0/1 * * * ?"),
-    (typeof(CleanLogsJob), "* 0 0 * * ?"),
-    (typeof(MailingJob), "* 0 12 29 2 ?")
+    //(typeof(HelloJob), "0 0/1 * * * ?"),
+    (typeof(CleanLogsJob), "* 0 0 * * ?")
+    //(typeof(MailingJob), "* 0 12 29 2 ?")
 };
 
 builder.Services.AddJobs(jobs);

@@ -7,6 +7,7 @@ using pd311_web_api.BLL.Services.Image;
 using pd311_web_api.BLL.Services.JwtService;
 using pd311_web_api.BLL.Services.Manufactures;
 using pd311_web_api.BLL.Services.Role;
+using pd311_web_api.BLL.Services.Storage;
 using pd311_web_api.BLL.Services.User;
 using Quartz;
 using System.Reflection;
@@ -50,6 +51,7 @@ namespace pd311_web_api.Infrastructure
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IManufactureService, ManufactureService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IStorageService, StorageService>();
         }
 
         public static void AddJobs(this IServiceCollection services, params (Type type, string schedule)[] jobs)

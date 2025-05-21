@@ -66,9 +66,16 @@ namespace pd311_web_api.BLL.Services.Image
                     return null;
                 }
 
+                var workDir = Path.Combine(ImagesPath, directoryPath);
+
+                if (!Directory.Exists(workDir))
+                {
+                    Directory.CreateDirectory(workDir);
+                }
+
                 var imageName = $"{Guid.NewGuid()}.{types[1]}";
 
-                var imagePath = Path.Combine(ImagesPath, directoryPath, imageName);
+                var imagePath = Path.Combine(workDir, imageName);
 
                 using (var stream = File.Create(imagePath))
                 {

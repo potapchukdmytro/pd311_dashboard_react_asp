@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using pd311_web_api.BLL.DTOs.User;
 using pd311_web_api.BLL.Services.Image;
+using pd311_web_api.BLL.Services.Storage;
 using System.Linq.Expressions;
 using static pd311_web_api.DAL.Entities.IdentityEntities;
 
@@ -13,12 +14,14 @@ namespace pd311_web_api.BLL.Services.User
         private readonly UserManager<AppUser> _userManager;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
+        private readonly IStorageService _storageService;
 
-        public UserService(UserManager<AppUser> userManager, IMapper mapper, IImageService imageService)
+        public UserService(UserManager<AppUser> userManager, IMapper mapper, IImageService imageService, IStorageService storageService)
         {
             _userManager = userManager;
             _mapper = mapper;
             _imageService = imageService;
+            _storageService = storageService;
         }
 
         public async Task<ServiceResponse> CreateAsync(CreateUserDto dto)
@@ -37,11 +40,7 @@ namespace pd311_web_api.BLL.Services.User
 
             if(dto.Image != null)
             {
-                string? imageName = await _imageService.SaveImageAsync(dto.Image, Settings.UsersImagesPath);
-                if (imageName != null)
-                {
-                    entity.Image = Path.Combine(Settings.UsersImagesPath, imageName);
-                }
+                entity.Image = await _storageService.UploadImageAsync(dto.Image, Settings.UsersImagesPath);
             }
 
             var result = await _userManager.CreateAsync(entity, dto.Password);
@@ -78,7 +77,7 @@ namespace pd311_web_api.BLL.Services.User
 
             if(!string.IsNullOrEmpty(entity.Image))
             {
-                _imageService.DeleteImage(entity.Image);
+                await _storageService.DeleteImageAsync(entity.Image);
             }
 
             return new ServiceResponse($"Користувача '{entity.UserName}' видалено");
